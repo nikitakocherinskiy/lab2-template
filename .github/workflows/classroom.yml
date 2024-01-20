@@ -83,7 +83,7 @@ jobs:
         run: npm run test --prefix rental-service
 
   # build:
-  #   name: Autograding
+  #   name: Autogradingl
   #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/checkout@v3
