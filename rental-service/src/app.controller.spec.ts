@@ -71,26 +71,4 @@ describe('AppController', () => {
       expect(responseMock.status).toHaveBeenCalledWith(200);
     });
   });
-
-  // describe('createPayment', () => {
-  //   it('should create payment and return status code 200 - success', async () => {
-  //     jest
-  //       .spyOn(service, 'createPayment')
-  //       //@ts-ignore
-  //       .mockImplementation(async () => paymentInfo);
-  //     await controller.createPayment({ price: 2023 });
-  //     expect(responseMock.status).toHaveBeenCalledWith(200);
-  //   });
-  // });
-
-  // describe('deletePayment', () => {
-  //   it('should delete payment by id and return status code 200 - success', async () => {
-  //     jest
-  //       .spyOn(service, 'deletePayment')
-  //       //@ts-ignore
-  //       .mockImplementation(async () => paymentInfo);
-  //     await controller.deletePayment(paymentUid);
-  //     expect(responseMock.status).toHaveBeenCalledWith(200);
-  //   });
-  // });
 });

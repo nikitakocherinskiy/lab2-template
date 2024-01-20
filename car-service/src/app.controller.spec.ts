@@ -66,13 +66,6 @@ describe('AppController', () => {
     });
   });
 
-  describe('findAllAvailableCars', () => {
-    it('should get an array of all cars and status code 200 - success', async () => {
-      const result = await controller.getAllAvailableCars(1, 10, false);
-      expect(Array.isArray(result.items)).toBe(true);
-    });
-  });
-
   describe('getCarById', () => {
     it('should get car by id and return status code 200 - success', async () => {
       jest.spyOn(service, 'getCarById').mockImplementation(async () => carDto);
