@@ -58,9 +58,6 @@ jobs:
       - name: Build rental-service
         run: npm run build --prefix rental-service
 
-      - name: Database migration for gateway-service
-        run: npm run db:push --prefix gateway-service
-
       - name: Database migration for payment-service
         run: npm run db:push --prefix payment-service
 
