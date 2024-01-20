@@ -5,17 +5,16 @@ services:
     container_name: postgres
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-      PG_DATA: /var/lib/postgresql/data
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
     ports:
       - 5434:5432
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./postgres/:/docker-entrypoint-initdb.d/
     networks:
-      - service
+      - default
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 1s
@@ -116,4 +115,5 @@ services:
 
 volumes:
   postgres-data:
-networks: default
+networks:
+  default:
