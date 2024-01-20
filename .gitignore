@@ -195,8 +195,8 @@ build-iPhoneSimulator/
 *.dll
 
 # Fortran module files
-*.mod
-*.smod
+# *.mod
+# *.smod
 
 # Compiled Static libraries
 *.lai
@@ -356,13 +356,13 @@ local.properties
 *.pdb
 
 # Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+# *.mod*
+# *.cmd
+# .tmp_versions/
+# modules.order
+# Module.symvers
+# Mkfile.old
+# dkms.conf
 
 ### Python template
 # Byte-compiled / optimized / DLL files
