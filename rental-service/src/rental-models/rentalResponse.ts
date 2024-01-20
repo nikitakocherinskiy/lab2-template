@@ -1,10 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID, IsDateString, IsEnum } from 'class-validator';
-import { CarInfo } from './carInfo';
-import { PaymentInfo } from './paymentInfo';
 
-enum RentalStatus {
+export enum RentalStatus {
   NEW = 'NEW',
   IN_PROGRESS = 'IN_PROGRESS',
   FINISHED = 'FINISHED',
@@ -12,25 +9,19 @@ enum RentalStatus {
 }
 
 export class RentalResponse {
-  @ApiProperty()
   @IsUUID()
-  rentalUid: string;
+  rental_uid: string;
 
-  @ApiProperty({ enum: RentalStatus })
   @IsEnum(RentalStatus)
   status: string;
 
-  @ApiProperty()
   @IsDateString()
-  dateFrom: string;
+  date_from: Date;
 
-  @ApiProperty()
   @IsDateString()
-  dateTo: string;
+  date_to: Date;
 
-  @ApiProperty()
-  car: CarInfo;
+  car_uid: string;
 
-  @ApiProperty()
-  payment: PaymentInfo;
+  payment_uid: string;
 }

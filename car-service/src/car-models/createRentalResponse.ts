@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID, IsDateString, IsEnum } from 'class-validator';
-
+import { RentalStatus } from './rentalResponse';
+import { PaymentInfo } from './paymentInfo';
 export class CreateRentalResponse {
   @ApiProperty()
   @IsUUID()

@@ -4,7 +4,7 @@ import { IsEnum, IsNumber, IsUUID } from 'class-validator';
 
 enum PaymentStatus {
   PAID = 'PAID',
-  REVERSED = 'REVERSED',
+  REVERSED = 'CANCELED',
 }
 
 export class PaymentInfo {

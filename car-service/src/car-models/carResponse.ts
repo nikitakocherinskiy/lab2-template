@@ -12,7 +12,7 @@ enum CarType {
 export class CarResponse {
   @ApiProperty()
   @IsUUID()
-  carUid: string;
+  car_uid: string;
 
   @ApiProperty()
   @IsString()
@@ -24,7 +24,7 @@ export class CarResponse {
 
   @ApiProperty()
   @IsString()
-  registrationNumber: string;
+  registration_number: string;
 
   @ApiProperty()
   @IsNumber()
@@ -40,5 +40,5 @@ export class CarResponse {
 
   @ApiProperty()
   @IsBoolean()
-  available: boolean;
+  availability: boolean;
 }

@@ -4,13 +4,13 @@ import { IsUUID, IsDateString } from 'class-validator';
 export class CreateRentalDto {
   @ApiProperty()
   @IsUUID()
-  carUid: string;
+  car_uid: string;
 
   @ApiProperty()
   @IsDateString()
-  dateFrom: string;
+  date_from: string;
 
   @ApiProperty()
   @IsDateString()
-  dateTo: string;
+  date_to: string;
 }

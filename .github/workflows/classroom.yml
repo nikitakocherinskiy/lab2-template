@@ -7,53 +7,118 @@ on:
     branches:
       - master
 jobs:
-  build:
-    name: Autograding
+  test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/grading-app
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - uses: docker/setup-buildx-action@v2
-
-      # TODO build and run unit tests
-
-      - name: Build images
-        timeout-minutes: 10
-        run: docker compose build
-
-      - name: Run containers
-        timeout-minutes: 5
-        run: |
-          docker compose up -d
-          ./scripts/wait-script.sh
-        env:
-          WAIT_PORTS: 8080,8070,8060,8050
-
-      - name: Run API Tests
-        uses: matt-ball/newman-action@master
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          collection: 3/postman/collection.json
-          environment: 3/postman/environment.json
-          delayRequest: 100
-          reporters: '[ "cli" ]'
+          node-version: 18
 
-      - uses: education/autograding@v1
-        id: autograder
-        continue-on-error: true
+      - name: Install dependencies for gateway-service
+        run: npm ci --prefix gateway-service
 
-      # - name: Github auto grader mark
-      #   uses: Romanow/google-sheet-autograder-marker@v1.0
-      #   with:
-      #     google_token: ${{secrets.GOOGLE_API_KEY}}
-      #     sheet_id: '1xkgjUX6Qmk7rdJG-QPOToav-HWWtthJjnShIKnw3oIY'
-      #     homework_number: 2
-      #     user_column: 'D'
-      #     column_offset: 'F'
-      #     mark: "'+"
+      - name: Install dependencies for payment-service
+        run: npm ci --prefix payment-service
 
-      - name: Stop containers
-        if: always()
-        continue-on-error: true
-        run: docker compose down -v
+      - name: Install dependencies for car-service
+        run: npm ci --prefix car-service
+
+      - name: Install dependencies for rental-service
+        run: npm ci --prefix rental-service
+
+      - name: Build gateway-service
+        run: npm run build --prefix gateway-service
+
+      - name: Build payment-service
+        run: npm run build --prefix payment-service
+
+      - name: Build car-service
+        run: npm run build --prefix car-service
+
+      - name: Build rental-service
+        run: npm run build --prefix rental-service
+
+      - name: Database migration for gateway-service
+        run: npm run db:push --prefix gateway-service
+
+      - name: Database migration for payment-service
+        run: npm run db:push --prefix payment-service
+
+      - name: Database migration for car-service
+        run: npm run db:push --prefix car-service
+
+      - name: Database migration for rental-service
+        run: npm run db:push --prefix rental-service
+
+      - name: Run Unit Tests for gateway-service
+        run: npm run test --prefix gateway-service
+
+      - name: Run Unit Tests for payment-service
+        run: npm run test --prefix payment-service
+
+      - name: Run Unit Tests for car-service
+        run: npm run test --prefix car-service
+
+      - name: Run Unit Tests for rental-service
+        run: npm run test --prefix rental-service
+
+  # build:
+  #   name: Autograding
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+
+  #     - uses: docker/setup-buildx-action@v2
+
+  #     # TODO build and run unit tests
+
+  #     - name: Build images
+  #       timeout-minutes: 10
+  #       run: docker compose build
+
+  #     - name: Run containers
+  #       timeout-minutes: 5
+  #       run: |
+  #         docker compose up -d
+  #         ./scripts/wait-script.sh
+  #       env:
+  #         WAIT_PORTS: 8080,8070,8060,8050
+
+  #     - name: Run API Tests
+  #       uses: matt-ball/newman-action@master
+  #       with:
+  #         collection: postman/collection.json
+  #         environment: postman/environment.json
+  #         delayRequest: 100
+  #         reporters: '[ "cli" ]'
+
+  #     - uses: education/autograding@v1
+  #       id: autograder
+  #       continue-on-error: true
+
+  #     - name: Stop containers
+  #       if: always()
+  #       continue-on-error: true
+  #       run: docker compose down -v

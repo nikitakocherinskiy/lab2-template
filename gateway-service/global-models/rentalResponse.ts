@@ -4,7 +4,7 @@ import { IsUUID, IsDateString, IsEnum } from 'class-validator';
 import { CarInfo } from './carInfo';
 import { PaymentInfo } from './paymentInfo';
 
-enum RentalStatus {
+export enum RentalStatus {
   NEW = 'NEW',
   IN_PROGRESS = 'IN_PROGRESS',
   FINISHED = 'FINISHED',

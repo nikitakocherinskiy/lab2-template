@@ -10,7 +10,7 @@ enum PaymentStatus {
 export class PaymentInfo {
   @ApiProperty()
   @IsUUID()
-  paymentUid: string;
+  payment_uid: string;
 
   @ApiProperty({ enum: PaymentStatus })
   @IsEnum(PaymentStatus)
