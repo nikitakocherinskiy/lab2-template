@@ -1,5 +1,5 @@
 FROM node:18
-WORKDIR /app
+WORKDIR /app/gateway-service
 COPY package*.json ./
 COPY tsconfig.json ./
 RUN npm ci

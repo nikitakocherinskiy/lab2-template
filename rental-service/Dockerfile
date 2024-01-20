@@ -1,5 +1,5 @@
 FROM node:18
-WORKDIR /app
+WORKDIR /app/rental-service
 COPY package*.json ./
 COPY prisma ./prisma/
 COPY .env ./

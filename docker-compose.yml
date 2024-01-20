@@ -4,11 +4,11 @@ services:
     image: postgres:latest
     container_name: postgres
     restart: always
-    # что то с эти придумать
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
+      PG_DATA: /var/lib/postgresql/data
     ports:
       - 5434:5432
     volumes:
