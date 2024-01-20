@@ -40,7 +40,7 @@ services:
     command: npm run start:dev
     restart: always
     networks:
-      - service
+      - default
 
   car:
     stdin_open: true
@@ -64,7 +64,7 @@ services:
     command: npm run start:migrate:start
     restart: always
     networks:
-      - service
+      - default
 
   rental:
     stdin_open: true
@@ -88,7 +88,7 @@ services:
     command: npm run start:migrate:start
     restart: always
     networks:
-      - service
+      - default
 
   payment:
     stdin_open: true
@@ -112,10 +112,8 @@ services:
     command: npm run start:migrate:start
     restart: always
     networks:
-      - service
+      - default
 
 volumes:
   postgres-data:
-networks:
-  service:
-    driver: bridge
+networks: default
