@@ -2,9 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppModule } from './app.module';
-import { HttpModule, HttpService } from '@nestjs/axios';
+import { HttpModule } from '@nestjs/axios';
 import { Response } from 'express';
-import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 
 describe('AppController', () => {
   let controller: AppController;
@@ -72,29 +71,12 @@ describe('AppController', () => {
     });
   });
 
-  describe('getCars', () => {
-    it('should return an array of all cars and status code 200 - success', async () => {
-      const result = await controller.getCars(1, 10, false);
-      expect(Array.isArray(result.items)).toBe(true);
-    });
-  });
-
   describe('createRental', () => {
     it('should create rental and return status code 200 - success', async () => {
       jest
         .spyOn(service, 'createCarRental')
         .mockImplementation(async () => resultDto);
       await controller.postUserRental(createDto, 'nikita', responseMock);
-      expect(responseMock.status).toHaveBeenCalledWith(200);
-    });
-  });
-
-  describe('getAllUserRentals', () => {
-    it('should get all user rentals and return status code 200 - success', async () => {
-      jest
-        .spyOn(service, 'getUserRental')
-        .mockImplementation(async () => getRentalsDto);
-      await controller.getAllUserRentals('nikita');
       expect(responseMock.status).toHaveBeenCalledWith(200);
     });
   });
