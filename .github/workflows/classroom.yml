@@ -130,7 +130,7 @@ jobs:
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
-          collection: collection.json
-          environment: environment.json
+          collection: postman/collection.json
+          environment: postman/environment.json
           delayRequest: 15
           reporters: '[ "cli" ]'
