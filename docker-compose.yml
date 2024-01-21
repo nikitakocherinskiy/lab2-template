@@ -8,8 +8,9 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
+      - POSTGRES_HOST=postgres
     ports:
-      - 5434:5432
+      - 5432:5432
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./postgres/:/docker-entrypoint-initdb.d/
@@ -60,7 +61,7 @@ services:
       - /app/node_modules
     env_file:
       - car-service/.env
-    command: npm run start:migrate:start
+    command: npm run start:migrate:seed
     restart: always
     networks:
       - default
@@ -106,6 +107,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - ../filldb/:/docker-entrypoint-initdb.d/
     env_file:
       - payment-service/.env
     command: npm run start:migrate:start
@@ -117,3 +119,4 @@ volumes:
   postgres-data:
 networks:
   default:
+    driver: bridge

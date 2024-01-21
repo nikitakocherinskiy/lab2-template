@@ -79,43 +79,81 @@ jobs:
       - name: Run Unit Tests for rental-service
         run: npm run test --prefix rental-service
 
-  # build:
-  #   name: Autograding
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
+  deploy:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  #     - uses: docker/setup-buildx-action@v2
+      - name: Send project files on VM
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "car-service,filldb,gateway-service,payment-service,postgres,postman,rental-service,scripts,docker-compose.yml"
+          target: /home/${{ secrets.SSH_USER }}/car_rental
 
-  #     # TODO build and run unit tests
+      - name: Build and up person-service
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /home/${{ secrets.SSH_USER }}/car_rental
+            echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker-compose down
+            echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker rmi gateway-service
+            echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker rmi rental-service
+            echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker rmi car_service
+            echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker rmi payment_service
+            echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker-compose up -d
 
-  #     - name: Build images
-  #       timeout-minutes: 10
-  #       run: docker compose build
+  build:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
 
-  #     - name: Run containers
-  #       timeout-minutes: 5
-  #       run: |
-  #         docker compose up -d
-  #         ./scripts/wait-script.sh
-  #       env:
-  #         WAIT_PORTS: 8080,8070,8060,8050
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-  #     - name: Run API Tests
-  #       uses: matt-ball/newman-action@master
-  #       with:
-  #         collection: postman/collection.json
-  #         environment: postman/environment.json
-  #         delayRequest: 100
-  #         reporters: '[ "cli" ]'
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-  #     - uses: education/autograding@v1
-  #       id: autograder
-  #       continue-on-error: true
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          file: Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/rsoi-lab2:latest
 
-  #     - name: Stop containers
-  #       if: always()
-  #       continue-on-error: true
-  #       run: docker compose down -v
+  api-test:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sleep for 3 minutes
+        run: sleep 180s
+        shell: bash
+
+      - name: Run API Tests
+        uses: matt-ball/newman-action@master
+        with:
+          collection: collection.json
+          environment: environment.json
+          delayRequest: 15
+          reporters: '[ "cli" ]'
