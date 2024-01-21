@@ -108,10 +108,10 @@ jobs:
           script: |
             cd /home/${{ secrets.SSH_USER }}/car-rental
             echo ${{ secrets.SSH_USER }} | sudo -S docker-compose down
-            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi gateway-service
-            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi rental-service
-            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi car-service
-            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi payment-service
+            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi  car_rental_gateway
+            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi car_rental_rental
+            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi car_rental_car
+            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi car_rental_payment
             echo ${{ secrets.SSH_USER }} | sudo -S docker-compose up -d
 
   api-test:
