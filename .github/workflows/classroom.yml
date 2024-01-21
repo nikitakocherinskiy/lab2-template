@@ -106,12 +106,12 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home/${{ secrets.SSH_USER }}/rsoi-car-rental-service
+            cd /home/${{ secrets.SSH_USER }}/rsoi-car-rental
             echo ${{ secrets.SSH_USER }} | sudo -S docker-compose down
-            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi rsoi_car_rental_service_gateway
-            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi rsoi_car_rental_service_rental
-            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi rsoi_car_rental_service_car
-            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi rsoi_car_rental_service_payment
+            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi rsoi_car_rental_gateway
+            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi rsoi_car_rental_rental
+            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi rsoi_car_rental_car
+            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi rsoi_car_rental_payment
             echo ${{ secrets.SSH_USER }} | sudo -S docker-compose up -d
 
   api-test:
