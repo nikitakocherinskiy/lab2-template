@@ -109,8 +109,8 @@ jobs:
             echo ${{ secrets.SSH_USER }} | sudo -S docker-compose down
             echo ${{ secrets.SSH_USER }} | sudo -S docker rmi gateway-service
             echo ${{ secrets.SSH_USER }} | sudo -S docker rmi rental-service
-            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi car_service
-            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi payment_service
+            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi car-service
+            echo ${{ secrets.SSH_USER }} | sudo -S docker rmi payment-service
             echo ${{ secrets.SSH_USER }} | sudo -S docker-compose up -d
 
   api-test:
